@@ -1,4 +1,4 @@
-package mobile.banking.customer.repository.jdbc;
+package mobile.banking.customer.repository;
 
 import mobile.banking.customer.Customer;
 
