@@ -2,6 +2,7 @@ package mobile.banking.config;
 
 import javax.sql.DataSource;
 
+import mobile.banking.customer.CustomerService;
 import mobile.banking.customer.repository.CustomerRepository;
 import mobile.banking.customer.repository.jdbctemplate.JdbcTemplateCustomerRepository;
 import org.springframework.context.annotation.Bean;
@@ -18,5 +19,10 @@ public class JdbcTemplateConfig {
     @Bean
     public CustomerRepository customerRepository() {
         return new JdbcTemplateCustomerRepository(dataSource);
+    }
+
+    @Bean
+    public CustomerService customerService() {
+        return new CustomerService(customerRepository());
     }
 }

@@ -1,0 +1,17 @@
+### 고객 정보 추가
+POST http://localhost:8080/api/customers
+Content-Type: application/json
+
+{
+  "name": "mobile",
+  "email": "mobile@test.com",
+  "cellphone": "010-1234-5678"
+}
+
+> {%
+    client.global.set("customerId", response.body.id);
+%}
+
+### 특정 고객 정보 조회
+GET http://localhost:8080/api/customers/{{customerId}}
+Accept: application/json
