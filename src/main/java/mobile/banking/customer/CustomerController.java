@@ -1,5 +1,8 @@
 package mobile.banking.customer;
 
+import mobile.banking.account.Account;
+import mobile.banking.account.AccountRequest;
+import mobile.banking.account.AccountService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,9 +13,11 @@ import java.util.List;
 public class CustomerController {
 
     private final CustomerService customerService;
+    private final AccountService accountService;
 
-    public CustomerController(final CustomerService customerService) {
+    public CustomerController(final CustomerService customerService, final AccountService accountService) {
         this.customerService = customerService;
+        this.accountService = accountService;
     }
 
 
@@ -56,5 +61,27 @@ public class CustomerController {
     public ResponseEntity<String> removeCustomer(@PathVariable("id") final Long id) {
         customerService.deleteCustomer(id);
         return ResponseEntity.ok("고객 정보 삭제 성공");
+    }
+
+    @GetMapping("/{id}/accounts")
+    public ResponseEntity<List<Account>> getAllAccounts(
+            @PathVariable("id") final Long id
+    ) {
+        List<Account> accounts = accountService.findByCustomerId(id);
+        return ResponseEntity.ok(accounts);
+    }
+
+
+    @PostMapping("/{id}/accounts")
+
+    public ResponseEntity<Account> createAccount(
+            @PathVariable("id") final Long id,
+            @RequestBody final AccountRequest request
+    ) {
+        Account account = accountService.createAccount(
+                new Account(request.getAccountNumber(), request.getBalance(), id)
+        );
+
+        return ResponseEntity.ok(account);
     }
 }
