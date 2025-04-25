@@ -16,8 +16,8 @@ public class CustomerService {
         return customerRepository.save(customer);
     }
 
-    List<Customer> findCustomers() {
-        return customerRepository.findAll();
+    List<Customer> findCustomers(final CustomerSearchCondition cond) {
+        return customerRepository.findCustomers(cond);
     }
 
     Optional<Customer> findCustomerById(final Long id) {
@@ -30,5 +30,9 @@ public class CustomerService {
 
     int deleteCustomer(final Long id) {
         return customerRepository.delete(id);
+    }
+
+    Optional<Customer> findCustomerByEmail(final String email) {
+        return customerRepository.findByEmail(email);
     }
 }

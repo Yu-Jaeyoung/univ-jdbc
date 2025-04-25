@@ -33,8 +33,10 @@ public class CustomerController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Customer>> getCustomers() {
-        return ResponseEntity.ok(customerService.findCustomers());
+    public ResponseEntity<List<Customer>> getCustomers(
+            final CustomerSearchCondition cond
+    ) {
+        return ResponseEntity.ok(customerService.findCustomers(cond));
     }
 
     @GetMapping("/{id}")
@@ -61,6 +63,14 @@ public class CustomerController {
     public ResponseEntity<String> removeCustomer(@PathVariable("id") final Long id) {
         customerService.deleteCustomer(id);
         return ResponseEntity.ok("고객 정보 삭제 성공");
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Customer> searchCustomer(
+            @RequestParam("email") final String email
+    ) {
+        Customer customer = customerService.findCustomerByEmail(email).get();
+        return ResponseEntity.ok(customer);
     }
 
     @GetMapping("/{id}/accounts")
