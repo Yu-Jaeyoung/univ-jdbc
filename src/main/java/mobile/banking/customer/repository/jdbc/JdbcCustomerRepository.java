@@ -2,6 +2,7 @@ package mobile.banking.customer.repository.jdbc;
 
 import mobile.banking.connection.ConnectionUtil;
 import mobile.banking.customer.Customer;
+import mobile.banking.customer.CustomerSearchCondition;
 import mobile.banking.customer.repository.CustomerRepository;
 
 import java.sql.*;
@@ -109,6 +110,16 @@ public class JdbcCustomerRepository implements CustomerRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public Optional<Customer> findByEmail(String email) {
+        return Optional.empty();
+    }
+
+    @Override
+    public List<Customer> findCustomers(CustomerSearchCondition cond) {
+        return List.of();
     }
 
 
