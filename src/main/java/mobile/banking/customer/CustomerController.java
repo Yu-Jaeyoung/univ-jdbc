@@ -3,10 +3,13 @@ package mobile.banking.customer;
 import mobile.banking.account.Account;
 import mobile.banking.account.AccountRequest;
 import mobile.banking.account.AccountService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/customers")
@@ -20,7 +23,6 @@ public class CustomerController {
         this.accountService = accountService;
     }
 
-
     @PostMapping
     public ResponseEntity<Customer> createCustomer(@RequestBody final CustomerRequest request) {
         Customer customer = new Customer(
@@ -29,19 +31,27 @@ public class CustomerController {
                 request.getCellphone()
         );
 
-        return ResponseEntity.ok(customerService.createCustomer(customer));
+        // URI location = URI.create("/customers/" + customer.getId());
+        // return ResponseEntity.created(location).body(customerService.createCustomer(customer));
+        return ResponseEntity.status(HttpStatus.CREATED).body(customerService.createCustomer(customer));
     }
 
     @GetMapping
     public ResponseEntity<List<Customer>> getCustomers(
             final CustomerSearchCondition cond
     ) {
-        return ResponseEntity.ok(customerService.findCustomers(cond));
+        List<Customer> customers = customerService.findCustomers(cond);
+        return customers.size() > 0
+                ? ResponseEntity.status(HttpStatus.OK).body(customers)
+                : ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Customer> getCustomerById(@PathVariable("id") final Long id) {
-        return ResponseEntity.ok(customerService.findCustomerById(id).get());
+        Optional<Customer> customer = customerService.findCustomerById(id);
+        return customer.isPresent()
+                ? ResponseEntity.ok(customer.get())
+                : ResponseEntity.notFound().build();
     }
 
     @PatchMapping("/{id}")
