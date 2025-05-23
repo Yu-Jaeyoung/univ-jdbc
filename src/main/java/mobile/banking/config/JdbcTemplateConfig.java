@@ -2,8 +2,11 @@ package mobile.banking.config;
 
 import javax.sql.DataSource;
 
+import mobile.banking.account.AccountHistoryService;
 import mobile.banking.account.AccountService;
+import mobile.banking.account.repository.AccountHistoryRepository;
 import mobile.banking.account.repository.AccountRepository;
+import mobile.banking.account.repository.jdbctemplate.JdbcTemplateAccountHistoryRepository;
 import mobile.banking.account.repository.jdbctemplate.JdbcTemplateAccountRepository;
 import mobile.banking.customer.CustomerService;
 import mobile.banking.customer.repository.CustomerRepository;
@@ -36,6 +39,16 @@ public class JdbcTemplateConfig {
 
     @Bean
     public AccountService accountService() {
-        return new AccountService(accountRepository());
+        return new AccountService(accountRepository(), accountHistoryRepository());
+    }
+
+    @Bean
+    public AccountHistoryService accountHistoryService() {
+        return new AccountHistoryService(accountHistoryRepository());
+    }
+
+    @Bean
+    public AccountHistoryRepository accountHistoryRepository() {
+        return new JdbcTemplateAccountHistoryRepository(dataSource);
     }
 }

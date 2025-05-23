@@ -58,4 +58,32 @@ public class AccountController {
         accountService.removeAccount(id);
         return ResponseEntity.ok("계좌 정보 삭제 성공");
     }
+
+    @PostMapping("/{id}/transfer")
+    public ResponseEntity<String> transferAccount(
+            @PathVariable("id") final Long id,
+            @RequestBody final TransferRequest request
+
+    ) {
+        accountService.transfer(id, request.getToAccountId(), request.getAmount());
+        return ResponseEntity.ok("계좌 이체 성공");
+    }
+
+    @PostMapping("/{id}/deposit")
+    public ResponseEntity<String> depositAccount(
+            @PathVariable("id") final Long id,
+            @RequestBody final TransferRequest request
+    ) {
+        accountService.deposit(id, request.getAmount());
+        return ResponseEntity.ok("입금 성공");
+    }
+
+    @PostMapping("/{id}/withdraw")
+    public ResponseEntity<String> withdrawAccount(
+            @PathVariable("id") final Long id,
+            @RequestBody final TransferRequest request
+    ) {
+        accountService.withdraw(id, request.getAmount());
+        return ResponseEntity.ok("출금 성공");
+    }
 }
